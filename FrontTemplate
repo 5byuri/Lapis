@@ -1,0 +1,78 @@
+<!---------- Header ------------->
+<header style="visibility: hidden"></header>
+
+<main>
+  <!--------- front-vocab card ---------->
+  {{^IsSentenceCard}} {{^IsHintCard}}  {{^IsClickCard}}
+    <div lang="ja" class="front-vocab">{{Expression}}</div>
+  {{/IsClickCard}}  {{/IsHintCard}} {{/IsSentenceCard}}
+
+  <!------- Sentence card --------->
+  {{#IsSentenceCard}}
+    <div lang="ja" class="front-sentence">
+      {{#SentenceFurigana}} {{kanji:SentenceFurigana}} {{/SentenceFurigana}}
+      {{^SentenceFurigana}} {{kanji:Sentence}} {{/SentenceFurigana}}
+    </div>
+  {{/IsSentenceCard}}
+
+  <!--------- Hint card ----------->
+  {{#IsHintCard}}
+    <div lang="ja" class="front-vocab">{{Expression}}</div>
+    <div id="hint">
+      {{#SentenceFurigana}} {{kanji:SentenceFurigana}} {{/SentenceFurigana}}
+      {{^SentenceFurigana}} {{kanji:Sentence}} {{/SentenceFurigana}}
+    </div>
+  {{/IsHintCard}}
+
+  <!-------- Click card ----------->
+  {{#IsClickCard}}
+    <div id="click">
+      <div lang="ja" class="front-vocab">{{Expression}}</div>
+    </div>
+  {{/IsClickCard}}
+
+  <!-- Hint -->
+  {{#Hint}}
+    <div id="hint">{{Hint}}</div>
+  {{/Hint}}
+</main>
+
+<script>
+  function ClickCard() {
+    const clickElement = document.getElementById('click');
+
+    // Store original content so that we can click back to it
+    const originalContent = clickElement.innerHTML;
+
+    // This is what it is going to click to
+    const clickedContent = `
+      <div lang="ja" class="front-sentence">
+        {{#SentenceFurigana}} {{kanji:SentenceFurigana}} {{/SentenceFurigana}}
+        {{^SentenceFurigana}} {{kanji:Sentence}} {{/SentenceFurigana}}
+      </div>
+    `;
+
+    // Implement the clicking mechanism
+    clickElement.addEventListener('click', function() {
+      if (clickElement.innerHTML === originalContent) {
+        clickElement.innerHTML = clickedContent;
+      } else {
+        clickElement.innerHTML = originalContent;
+      }
+    });
+  }
+
+  function initialize() {
+    // Check what card type it is
+    if (`{{IsClickCard}}`) ClickCard();
+  }
+
+  initialize();
+
+	userJs1=()=>{
+		document.getElementById("click").click();
+	}
+
+
+
+</script>
